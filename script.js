@@ -5,6 +5,41 @@ var characterList = []
 var page = 0;
 //VARIABILI GLOBALI
 //////////////////////////////////////////////////////////////////
+class Character {
+    constructor(name, films, tvShows,) {
+        this.name = name;
+        this.films = films;
+        this.tvShows = tvShows;
+    }
+
+    static getCharacterList(page, pageSize, names) {
+
+        console.log(apiBaseUrl + `?page=${page}&pageSize=${pageSize}`)
+        if (names) {
+            var fullBaseUrl = `${apiBaseUrl}?page=${page}&pageSize=${pageSize}&name=${names}`
+        } else {
+            fullBaseUrl = apiBaseUrl + `?page=${page}&pageSize=${pageSize}`
+        }
+
+        return fetch(fullBaseUrl,
+            {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+
+                }
+            });
+
+    }
+}
+
+
+
+
+
+
+
+
 const debounce = (callback, wait) => {
     let timeoutId = null;
     return (...args) => {
@@ -22,7 +57,11 @@ const handleSearch = debounce((ev) => {
 }, 700);
 
 document.addEventListener('DOMContentLoaded', () => {
-    nextPage()
+
+    Character.getCharacterList();
+
+
+    //nextPage()
     input.addEventListener('keyup', handleSearch);
     //input.addEventListener('keyup', handleCallApi)
 
@@ -80,7 +119,7 @@ function stampCharacter(characterList) {
 
     if (Array.isArray(characterList) === false) {
         let transformedCharacterList = [characterList]
-        
+
         console.log(transformedCharacterList);
         transformedCharacterList.forEach(character => {
             let col = document.createElement('div');
@@ -119,36 +158,36 @@ function stampCharacter(characterList) {
 
 
 
-        characterList.forEach(character => {
-            let col = document.createElement('div');
-            col.classList.add('col');
-            let card = document.createElement('div');
-            col.appendChild(card)
-            console.log(col);
-            card.classList.add('card');
-            card.classList.add('my-5');
-            let imgShowed = document.createElement('img');
-            imgShowed.classList.add('img-card')
-            imgShowed.src = character.imageUrl;
-            card.appendChild(imgShowed);
-            let cardBody = document.createElement('div');
-            cardBody.classList.add('card-body');
-            cardBody._id = "card-" + character._id;
-            card.appendChild(cardBody);
-            let cardTitle = document.createElement('h5')
-            cardTitle.classList.add('card-title')
-            cardTitle.textContent = character.name;
-            cardBody.appendChild(cardTitle);
-            characterContainer.appendChild(col);
-            cardBody = document.getElementById('card-' + character._id);
-            console.log(card);
-            let btnFra = document.createElement('span');
-            btnFra.classList.add('btn-fra');
-            btnFra.innerHTML = 'Scopri di pi&ugrave;'
-            card.appendChild(btnFra)
-            btnFra.addEventListener('click', (e) => singleCharacter(character))
-        });
-    
+    characterList.forEach(character => {
+        let col = document.createElement('div');
+        col.classList.add('col');
+        let card = document.createElement('div');
+        col.appendChild(card)
+        console.log(col);
+        card.classList.add('card');
+        card.classList.add('my-5');
+        let imgShowed = document.createElement('img');
+        imgShowed.classList.add('img-card')
+        imgShowed.src = character.imageUrl;
+        card.appendChild(imgShowed);
+        let cardBody = document.createElement('div');
+        cardBody.classList.add('card-body');
+        cardBody._id = "card-" + character._id;
+        card.appendChild(cardBody);
+        let cardTitle = document.createElement('h5')
+        cardTitle.classList.add('card-title')
+        cardTitle.textContent = character.name;
+        cardBody.appendChild(cardTitle);
+        characterContainer.appendChild(col);
+        cardBody = document.getElementById('card-' + character._id);
+        console.log(card);
+        let btnFra = document.createElement('span');
+        btnFra.classList.add('btn-fra');
+        btnFra.innerHTML = 'Scopri di pi&ugrave;'
+        card.appendChild(btnFra)
+        btnFra.addEventListener('click', (e) => singleCharacter(character))
+    });
+
 
 
 
@@ -159,23 +198,7 @@ function stampCharacter(characterList) {
 
 //////////////////////////////
 //CALL FUNCTION FOR CHARACTERS //////////////
-function getCharacterList(page, pageSize, names) {
-    console.log(apiBaseUrl + `?page=${page}&pageSize=${pageSize}`)
-    if (names) {
-        var fullBaseUrl = `${apiBaseUrl}?page=${page}&pageSize=${pageSize}&name=${names}`
-    } else {
-        fullBaseUrl = apiBaseUrl + `?page=${page}&pageSize=${pageSize}`
-    }
 
-    return fetch(fullBaseUrl,
-        {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-
-            }
-        });
-}
 
 
 
